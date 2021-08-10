@@ -5,14 +5,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Appbar, TextInput, Button, Card, List } from 'react-native-paper';
 import Header from '../Header';
 
-export default function SearchScreen() {
+export default function SearchScreen({navigation}) {
   const [city, setCity] = useState('');
   const [result, setResult] = useState({});
   let newResult = [];
     newResult.push(result);
-  
-  console.log('result here new', typeof newResult);
-  console.log('result ', typeof result);
 
 
   const fetchCity = (text) => {
@@ -23,10 +20,22 @@ export default function SearchScreen() {
     .then(data => setResult(data.location))
   }
 
+  const handleBtn = async () => {
+    navigation.navigate('Weather information', {
+      cityName: city
+    })
+    const store = await AsyncStorage.setItem('city', city)
+    console.log('store data',await AsyncStorage.getItem('city'));
+  }
+
   return (
     <View>
       {/* <Header/> */}
       <TextInput label="Enter city name" onChangeText={text => fetchCity(text)}/>
+
+      <Button style={{margin: 20}} mode="contained" onPress={handleBtn}>
+      search
+      </Button>
 
       {/* show city result */}
       {
